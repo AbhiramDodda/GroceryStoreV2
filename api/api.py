@@ -1,0 +1,40 @@
+from flask_restful import Resource
+from flask import request
+from helpers.helpers import validateUser, generateToken, checkUser, newUser
+
+class LoginValidation(Resource):
+    def get(self):
+        pass
+    def put(self):
+        pass
+    def post(self):
+        data = request.get_json()
+        response_obj = {}
+        if validateUser(data['email'], data['password']):
+            token = generateToken(data['email'])
+            response_obj = {'valid_login': True, 'auth_token': token}, 200
+        else:
+            response_obj = {'valid_login': False}, 200
+        return response_obj
+    def delete(self):
+        pass
+
+class SignupValidation(Resource):
+    def get(self):
+        if checkUser(request.headers['email']):
+            return {'user_exists': True}, 200
+        return {'user_exists': False}, 200
+    def post(self):
+        data = request.get_json()
+        if checkUser(data['email']):
+            return {'valid_registration': False}, 200
+        else:
+            if newUser(data['email'], data['password']):
+                token = generateToken(data['email'])
+                return {'valid_registration': True, 'auth_token': token, 'unknown_error': False}, 200
+            else:
+                return {'valid_registration': True, 'unknown_error': True}, 200
+    def put(self):
+        pass
+    def delete(self):
+        pass

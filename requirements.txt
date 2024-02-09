@@ -1,0 +1,2 @@
+flask==3.0
+flask_restful==0.3
