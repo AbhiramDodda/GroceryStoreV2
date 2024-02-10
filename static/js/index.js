@@ -48,16 +48,7 @@ const signUpComp = Vue.component("signup", {
                 v-model="password"
               />
             </div>
-            <div class="mb-3 form-check">
-              <label class="form-check-label" for="exampleCheck1">Check me out</label>
-            </div>
-            <button @click=submit() class="btn btn-primary">Login</button>
-            <router-link to="/signup">
-            <button
-              class="btn btn-primary"
-            >
-              Register
-            </button>
+            <button @click=submit() class="btn btn-primary">Signup</button>
           </router-link>
         </div>
   `,
@@ -90,11 +81,11 @@ const signUpComp = Vue.component("signup", {
       document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
     },
     submit: function () {
-      const login_validate_url =
+      const signup_validate_url =
         "http://" + window.location.host + "/signup_validate";
-      const dashboard_url = "http//" + window.location.host + "/dashboard";
-      if (this.emailCheck(this.email) && this.password.length > 8) {
-        fetch(login_validate_url, {
+      const dashboard_url = "http://" + window.location.host + "/dashboard";
+      if (this.emailCheck(this.email) && this.password.length >= 8) {
+        fetch(signup_validate_url, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -108,10 +99,32 @@ const signUpComp = Vue.component("signup", {
             return response.json();
           })
           .then((data) => {
-            if (data["valid_login"]) {
-              console.log("Valid login");
-              this.submit.setCookie("auth-token", data["auth_token"], 1);
-              window.location.href = dashboard_url;
+            if (!data["user_exists"]) {
+              fetch(signup_validate_url, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  email: this.email,
+                  password: this.password,
+                }),
+              })
+                .then((response) => {
+                  if (!response.ok) {
+                    console.log("Response not ok");
+                  }
+                  return response.json();
+                })
+                .then((data) => {
+                  if (data["valid_signup"]) {
+                    if (!data["unknown_error"]) {
+                      this.setCookie("auth_token", data["auth_token"], 1);
+                      Console.log(data["token"]);
+                      window.location.host = dashboard_url;
+                    }
+                  }
+                });
             }
           });
       } else {
@@ -149,9 +162,6 @@ const loginComp = Vue.component("login", {
                 name="password"
                 v-model="password"
               />
-            </div>
-            <div class="mb-3 form-check">
-              <label class="form-check-label" for="exampleCheck1">Check me out</label>
             </div>
             <button @click=submit() class="btn btn-primary">Login</button>
             <router-link to="/signup">
@@ -194,14 +204,17 @@ const loginComp = Vue.component("login", {
     submit: function () {
       const login_validate_url =
         "http://" + window.location.host + "/login_validate";
-      const dashboard_url = "http//" + window.location.host + "/dashboard";
-      if (this.emailCheck(this.email) && this.password.length > 8) {
+      const dashboard_url = "http://" + window.location.host + "/dashboard";
+      if (this.emailCheck(this.email) && this.password.length >= 8) {
         fetch(login_validate_url, {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
-            email: this.email,
           },
+          body: JSON.stringify({
+            email: this.email,
+            password: this.password,
+          }),
         })
           .then((response) => {
             if (!response.ok) {
@@ -212,7 +225,8 @@ const loginComp = Vue.component("login", {
           .then((data) => {
             if (data["valid_login"]) {
               console.log("Valid login");
-              this.submit.setCookie("auth-token", data["auth_token"], 1);
+              this.setCookie("auth_token", data["auth_token"], 1);
+
               window.location.href = dashboard_url;
             }
           });

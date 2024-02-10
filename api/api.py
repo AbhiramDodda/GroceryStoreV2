@@ -22,18 +22,39 @@ class LoginValidation(Resource):
 class SignupValidation(Resource):
     def get(self):
         if checkUser(request.headers['email']):
+            print("'user exists")
             return {'user_exists': True}, 200
         return {'user_exists': False}, 200
     def post(self):
         data = request.get_json()
         if checkUser(data['email']):
-            return {'valid_registration': False}, 200
+            return {'valid_signup': False}, 200
         else:
             if newUser(data['email'], data['password']):
                 token = generateToken(data['email'])
-                return {'valid_registration': True, 'auth_token': token, 'unknown_error': False}, 200
+                return {'valid_signup': True, 'auth_token': token, 'unknown_error': False}, 200
             else:
-                return {'valid_registration': True, 'unknown_error': True}, 200
+                return {'valid_signup': True, 'unknown_error': True}, 200
+    def put(self):
+        pass
+    def delete(self):
+        pass
+
+class CategoryCRUD(Resource):
+    def get(self):
+        pass
+    def post(self):
+        pass
+    def put(self):
+        pass
+    def delete(self):
+        pass
+
+class ProductCRUD(Resource):
+    def get(self):
+        pass
+    def post(self):
+        pass
     def put(self):
         pass
     def delete(self):

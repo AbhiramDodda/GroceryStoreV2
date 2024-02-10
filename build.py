@@ -5,6 +5,7 @@ from database.db import db
 from functools import wraps
 import jwt
 
+secret_key = 'Secret_Key9@+'
 
 def build_app():
     app = Flask(__name__)
@@ -20,11 +21,11 @@ app, api = build_app()
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        token = request.args.get('token')
+        token = request.cookies.get('auth_token')
         if not token:
             return jsonify({'message': 'Token missing'})
         try:
-            data = jwt.decode(token, app.config['SECRET_KEY'])
+            data = jwt.decode(token, secret_key, algorithms = ['HS256'])
         except:
             return jsonify({'message':'Invalid'}), 403
         return f(*args, **kwargs)
