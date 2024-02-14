@@ -1,6 +1,6 @@
 from flask_restful import Resource
 from flask import request
-from helpers.helpers import validateUser, generateToken, checkUser, newUser
+from helpers.helpers import validateUser, generateToken, checkUser, newUser, getCategories, getProducts, newCategory, newProduct
 
 class LoginValidation(Resource):
     def get(self):
@@ -42,7 +42,8 @@ class SignupValidation(Resource):
 
 class CategoryCRUD(Resource):
     def get(self):
-        pass
+        data = getProducts()
+        return {'data': data}, 200
     def post(self):
         pass
     def put(self):
@@ -51,6 +52,16 @@ class CategoryCRUD(Resource):
         pass
 
 class ProductCRUD(Resource):
+    def get(self):
+        pass
+    def post(self):
+        pass
+    def put(self):
+        pass
+    def delete(self):
+        pass
+
+class SearchAPI(Resource):
     def get(self):
         pass
     def post(self):

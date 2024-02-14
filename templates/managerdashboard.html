@@ -28,11 +28,53 @@
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
     ></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+      }
+
+      .card {
+        background-color: white;
+        width: 300px;
+        padding: 20px;
+        border-radius: 10px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+      }
+
+      .close:hover {
+        color: red;
+      }
+    </style>
+
     <title>Small Basket</title>
   </head>
   <body>
     <div id="app">
-      <router-view></router-view>
+      <search-component></search-component>
+      <dashboard-component></dashboard-component>
     </div>
   </body>
   <script

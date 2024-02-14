@@ -1,7 +1,7 @@
 from build import app, api, token_required
 from flask import render_template, redirect, url_for, request
 from flask_restful import Api
-from api.api import LoginValidation, SignupValidation
+from api.api import LoginValidation, SignupValidation, CategoryCRUD, ProductCRUD, SearchAPI
 import jwt
 
 secret_key = 'Secret_Key9@+'
@@ -77,6 +77,9 @@ def user():
 # API routes
 api.add_resource(LoginValidation, '/login_validate') # POST
 api.add_resource(SignupValidation, '/signup_validate') # GET, POST
+api.add_resource(CategoryCRUD, '/category') 
+api.add_resource(ProductCRUD, '/product')
+api.add_resource(SearchAPI, '/search')
 
 if __name__ == '__main__':
     app.run(debug = False)

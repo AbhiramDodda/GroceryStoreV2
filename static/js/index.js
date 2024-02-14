@@ -26,8 +26,8 @@ const signUpComp = Vue.component("signup", {
   // TEMPLATE
   template: `
         <div>
+        <p v-if="invalid_login">Invalid credentials</p>
             <div class="mb-3">
-            <p v-if="invalid_login">Invalid credentials</p>
               <label for="exampleInputEmail1" class="form-label">Username</label>
               <input
                 type="text"
@@ -49,7 +49,6 @@ const signUpComp = Vue.component("signup", {
               />
             </div>
             <button @click=submit() class="btn btn-primary">Signup</button>
-          </router-link>
         </div>
   `,
 
