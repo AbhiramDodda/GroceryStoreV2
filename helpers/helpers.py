@@ -69,21 +69,27 @@ def newManager(email, password):
 
 # Category functios
 def getCategories():
-    ''' List of category objects is returned '''
+    ''' List of tuples (category_id , category_name) is returned '''
     categories = db.session.query(Categories).all()
+    # categories = [(category.category_id, category.category_name) for category in categories]
     #categories = [cat.name for cat in categories]
     return categories
 
 def newCategory(name):
     ''' Creation of new category by manager '''
-    le = int(random.random()*10000000)+random.randint(1,100)
-    le = name[0]+str(le)+name[-1]
+    le = ''
+    while len(str(le)) != 8:
+        le = int(random.random()*100000000)+random.randint(1,100)
     name = name.strip()
+    #print(le, len(le))
+    le = name[0]+str(le)+name[-1]
+    
     if len(name) < 1:
         return "Enter valid name"
+    name = ''.join(name.split(' '))
     sname = name.lower()
     try:
-        db.session.add(Categories(category_id = le,name = name,search = sname))
+        db.session.add(Categories(category_id = le,category_name = name,search = sname))
         db.session.commit()
     except:
         return "Enter valid details"
@@ -122,7 +128,9 @@ def getProducts():
     categories = getCategories()
     products = {}
     for i in categories:
-        products[i] = db.session.query(Products).filter(Products.category_id == i.category_id).all()
+        products[i.category_id+','+i.category_name] = db.session.query(Products).filter(Products.category_id == i.category_id).all()
+    #print(products)
+    # category_id is of fixed length of 
     return products
 
 def getaProduct(prod_id):
@@ -136,7 +144,9 @@ def newProduct(cat_id,name,price,unit,stock,fractal):
         return False
     sname = name.lower()
     prods = db.session.query(Products).all()
-    le = int(random.random()*10000000)+random.randint(1,100)
+    le = ''
+    while len(str(le)) != 8:
+        le = int(random.random()*100000000)+random.randint(1,100)
     le = name[0]+str(le)+name[-1]
     try:
         price = float(price)

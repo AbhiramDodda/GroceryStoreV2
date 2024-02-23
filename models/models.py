@@ -15,16 +15,16 @@ class Roles(db.Model):
 class Categories(db.Model):
     __tablename__ = "categories"
     category_id = db.Column(db.String, primary_key = True)
-    name = db.Column(db.String, unique = True, nullable = False)
+    category_name = db.Column(db.String, unique = True, nullable = False)
     search = db.Column(db.String,nullable = False)
 
 class Products(db.Model):
     __tablename__ = "products"
     product_id = db.Column(db.String, nullable = False)
     category_id = db.Column(db.String, db.ForeignKey("categories.category_id"), nullable = False)
-    name = db.Column(db.String, primary_key = True, nullable = False)
+    product_name = db.Column(db.String, primary_key = True, nullable = False)
     price = db.Column(db.Float, nullable = False)
     unit = db.Column(db.String, nullable = False)
-    fractal_allowed = db.Column(db.String, nullable = False)
+    fractal_allowed = db.Column(db.Boolean, nullable = False)
     stock = db.Column(db.Float, nullable = False)
     search = db.Column(db.String,nullable = False)

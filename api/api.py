@@ -43,9 +43,14 @@ class SignupValidation(Resource):
 class CategoryCRUD(Resource):
     def get(self):
         data = getProducts()
+        if len(data) == 0:
+            return {'data': []}, 200
         return {'data': data}, 200
     def post(self):
-        pass
+        data = request.get_json()
+        if newCategory(data['category_name']):
+            return {'valid': True}, 200
+        return {'valid': False}, 200
     def put(self):
         pass
     def delete(self):
